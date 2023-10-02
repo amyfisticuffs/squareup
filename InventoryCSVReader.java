@@ -4,6 +4,7 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -11,13 +12,16 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class InventoryCSVReader {
-    private static final String SAMPLE_CSV_FILE_PATH = "./test-itemcounts.csv";
     String filenameString;
+    String pathString;
+    Path filePath;
     String[] header;
     HashMap<String, String> countsBySku;
 
-    public InventoryCSVReader(String filenameString) {
+    public InventoryCSVReader(String filenameString, String pathString) {
         this.filenameString = filenameString;
+        this.pathString = pathString;
+        this.filePath = Paths.get(pathString, filenameString);
         this.countsBySku = new HashMap<String, String>();
         readInventoryFile(filenameString);
     }
@@ -63,8 +67,18 @@ public class InventoryCSVReader {
 
     // Unit Test
     public static void main(String[] args) throws IOException {
+
+        if (args.length != 2) {
+            System.err.println("Usage: InventoryCSVReader InventoryFile FilePath");
+            System.exit(1);
+         }
+      
+         for(int i = 0; i< args.length; i++) {
+            System.out.println(String.format("Command Line Argument %d is %s", i, args[i]));
+         }  
+
         try (
-            Reader reader = Files.newBufferedReader(Paths.get(SAMPLE_CSV_FILE_PATH));
+            Reader reader = Files.newBufferedReader(Paths.get(args[1], args[0]));
             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
         ) {
             // Item Name,Item Variation,SKU,GTIN,Unit,Unit cost,Expected,Actual,Variance (count),Variance (cost),Counters

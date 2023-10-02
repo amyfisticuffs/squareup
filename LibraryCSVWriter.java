@@ -8,16 +8,16 @@ import java.util.HashMap;
 import java.util.List;
 
 public class LibraryCSVWriter {
-    private static final String SAMPLE_CSV_FILE = "result-catalog.csv";
-    private static final String WORKSPACE_PATH = ".";
-
+    private static final String RESULT_CSV_FILE = "result-catalog.csv";
 
     String[] fileHeader;
     String filename;
+    String pathString;
 
-    public LibraryCSVWriter(String[] fileHeader, String filename) {
+    public LibraryCSVWriter(String[] fileHeader, String filename, String pathString) {
         this.fileHeader = fileHeader;
         this.filename = filename;
+        this.pathString = pathString;
     }
 
     public static String getTimestampString() {
@@ -41,10 +41,10 @@ public class LibraryCSVWriter {
         try {
             List<String[]> csvDataList = createDataList(libraryItemsBySku);
             String ts = getTimestampString();
-            String outputFile = ts+"-"+SAMPLE_CSV_FILE;
+            String outputFile = ts+"-"+RESULT_CSV_FILE;
             CSVPrinter csvFilePrinter = null;
             CSVFormat csvFileFormat = CSVFormat.DEFAULT;
-            File file = new File(WORKSPACE_PATH, outputFile);
+            File file = new File(pathString, outputFile);
             FileWriter fileWriter = new FileWriter(file);
             csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
 
@@ -65,16 +65,25 @@ public class LibraryCSVWriter {
     // Unit Test
     public static void main(String[] args) throws IOException {
 
+        if (args.length != 1) {
+            System.err.println("Usage: LibraryCSVWriter LibraryCatalogPath");
+            System.exit(1);
+         }
+      
+         for(int i = 0; i< args.length; i++) {
+            System.out.println(String.format("Command Line Argument %d is %s", i, args[i]));
+         }  
+
         List<String[]> data = new ArrayList<>();
         data.add(new String[]{ "A", "B", "C" });
         data.add(new String[]{ "1", "2", "3" });
         data.add(new String[]{ "A1", "B2", "C3" });
 
         String ts = getTimestampString();
-        String outputFile = ts+"-"+SAMPLE_CSV_FILE;
+        String outputFile = ts+"-"+RESULT_CSV_FILE;
         CSVPrinter csvFilePrinter = null;
         CSVFormat csvFileFormat = CSVFormat.DEFAULT;
-        File file = new File(WORKSPACE_PATH, outputFile);
+        File file = new File(args[0], outputFile);
         FileWriter fileWriter = new FileWriter(file);
         csvFilePrinter = new CSVPrinter(fileWriter, csvFileFormat);
 

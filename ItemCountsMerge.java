@@ -13,10 +13,10 @@ public class ItemCountsMerge {
    InventoryCSVReader inventoryReader;
    LibraryCSVReader libraryReader;
 
-   public ItemCountsMerge(String catalogFilename, String inventoryFilename) {
-      inventoryReader = new InventoryCSVReader(inventoryFilename);
+   public ItemCountsMerge(String catalogFilename, String inventoryFilename, String pathString) {
+      inventoryReader = new InventoryCSVReader(inventoryFilename, pathString);
       itemCountsBySku = inventoryReader.getCountsBySku();
-      libraryReader = new LibraryCSVReader(catalogFilename);
+      libraryReader = new LibraryCSVReader(catalogFilename, pathString);
       libraryItemsBySku = libraryReader.getItemsBySku();
 
    }
@@ -47,7 +47,8 @@ public class ItemCountsMerge {
    public void writeLibraryFile() {
       String[] header = libraryReader.getHeader();
       String filename = libraryReader.getFilenameString();
-      LibraryCSVWriter writer = new LibraryCSVWriter(header, filename);
+      String pathString = libraryReader.getPathString();
+      LibraryCSVWriter writer = new LibraryCSVWriter(header, filename, pathString);
       writer.writeFile(libraryItemsBySku);
    }
 
@@ -62,16 +63,16 @@ public class ItemCountsMerge {
 
    public static void main(String[] args) {
 		
-      //if (args.length != 2) {
-      //   System.err.println("Usage: ItemCountsMerge LibraryCatalogFilename InventoryCountsFilename");
-      //   System.exit(1);
-      //}
+      if (args.length != 3) {
+         System.err.println("Usage: ItemCountsMerge FilePath LibraryCatalogFilename InventoryCountsFilename");
+         System.exit(1);
+      }
    
       for(int i = 0; i< args.length; i++) {
          System.out.println(String.format("Command Line Argument %d is %s", i, args[i]));
       }  
 
-      ItemCountsMerge merge = new ItemCountsMerge("./catalog-2023-09-08-2336.csv", "./7September2023-01-combined-itemcounts.csv");
+      ItemCountsMerge merge = new ItemCountsMerge("catalog-2023-09-08-2336.csv", "7September2023-01-combined-itemcounts.csv", ".");
 
       merge.updateLibraryWithInventoryCounts();
       merge.removeItemsNotInInventory();

@@ -4,28 +4,31 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.Iterator;
 
 public class LibraryCSVReader {
     private static final String SAMPLE_CSV_FILE_PATH = "./test-catalog.csv";
     String filenameString;
+    String pathString;
     String[] header;
     HashMap<String, LibraryItem> itemsBySku;
 
-    public LibraryCSVReader(String filenameString) {
+    public LibraryCSVReader(String filenameString, String pathString) {
         this.filenameString = filenameString;
+        this.pathString = pathString;
         this.itemsBySku = new HashMap<String, LibraryItem>();
-        readInventoryFile(filenameString);
+        readInventoryFile(filenameString, pathString);
     }
 
-    public String readInventoryFile(String filename) {
+    public String readInventoryFile(String filename, String pathString) {
         String headerLine = new String();
+        Path filepath = Paths.get(pathString, filename);
         try (
-            Reader reader = Files.newBufferedReader(Paths.get(filename));
+            Reader reader = Files.newBufferedReader(filepath);
             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
         ) { 
             Iterator<CSVRecord> it = csvParser.iterator();
@@ -38,7 +41,7 @@ public class LibraryCSVReader {
                 source.forEach(target::add);
                 header = new String[csvRecord.size()];
                 header = target.toArray(header);
-                System.out.println("Found Library Header\n"+ Arrays.toString(header));
+                // System.out.println("Found Library Header\n"+ Arrays.toString(header));
             }
             while (it.hasNext()) {
                 csvRecord = it.next();
@@ -100,8 +103,9 @@ public class LibraryCSVReader {
         } catch(Exception e) {
             System.out.println("An exception was thrown while reading Library Item Catalog File: "+ filenameString);
             System.out.println(e.getMessage());
-         }
-         return headerLine;
+        }
+        // System.out.println("Found "+itemsBySku.size()+" in "+filepath.toString());
+        return headerLine;
     }
 
     public HashMap<String, LibraryItem> getItemsBySku() {
@@ -116,10 +120,24 @@ public class LibraryCSVReader {
         return filenameString;
     }
 
+    public String getPathString() {
+        return pathString;
+    }
+
     // Unit Test
     public static void main(String[] args) throws IOException {
+
+        if (args.length != 2) {
+            System.err.println("Usage: LibraryCSVReader LibraryCatalogFilename LibraryCatalogPath");
+            System.exit(1);
+         }
+      
+         for(int i = 0; i< args.length; i++) {
+            System.out.println(String.format("Command Line Argument %d is %s", i, args[i]));
+         }  
+
         try (
-            Reader reader = Files.newBufferedReader(Paths.get(SAMPLE_CSV_FILE_PATH));
+            Reader reader = Files.newBufferedReader(Paths.get(args[1], args[0]));
             CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
         ) {
             // Token,Item Name,Variation Name,SKU,Description,Category,GTIN,Square Online Item Visibility,

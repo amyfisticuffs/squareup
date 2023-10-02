@@ -1,0 +1,55 @@
+{
+    // Use IntelliSense to learn about possible attributes.
+    // Hover to view descriptions of existing attributes.
+    // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+    "version": "0.2.0",
+    "configurations": [
+        {
+            "type": "java",
+            "name": "Current File",
+            "request": "launch",
+            "mainClass": "${file}",
+            "args": ["test-catalog.csv", "test-itemcounts.csv", "../catalog"]
+        },
+        {
+            "type": "java",
+            "name": "ClothingTaxReport",
+            "request": "launch",
+            "mainClass": "ClothingTaxReport",
+            "projectName": "ItemCountsMerge_605af54e",
+            "args": ["test-catalog-report.csv", "../catalog"]
+        },
+        {
+            "type": "java",
+            "name": "InventoryCSVReader",
+            "request": "launch",
+            "mainClass": "InventoryCSVReader",
+            "projectName": "ItemCountsMerge_605af54e",
+            "args": ["test-itemcounts.csv", "../catalog"]
+        },
+        {
+            "type": "java",
+            "name": "ItemCountsMerge",
+            "request": "launch",
+            "mainClass": "ItemCountsMerge",
+            "projectName": "ItemCountsMerge_605af54e",
+            "args": ["test-catalog.csv", "test-itemcounts.csv", "../catalog"]
+        },
+        {
+            "type": "java",
+            "name": "LibraryCSVReader",
+            "request": "launch",
+            "mainClass": "LibraryCSVReader",
+            "projectName": "ItemCountsMerge_605af54e",
+            "args": ["test-catalog.csv", "../catalog"]
+        },
+        {
+            "type": "java",
+            "name": "LibraryCSVWriter",
+            "request": "launch",
+            "mainClass": "LibraryCSVWriter",
+            "projectName": "ItemCountsMerge_605af54e",
+            "args": ["../catalog"]
+        }
+    ]
+}
