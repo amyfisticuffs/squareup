@@ -11,7 +11,6 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class LibraryCSVReader {
-    private static final String SAMPLE_CSV_FILE_PATH = "./test-catalog.csv";
     String filenameString;
     String pathString;
     String[] header;
