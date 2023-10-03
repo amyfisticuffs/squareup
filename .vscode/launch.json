@@ -6,10 +6,16 @@
     "configurations": [
         {
             "type": "java",
+            "name": "PurchaseOrderCSVReader",
+            "request": "launch",
+            "mainClass": "PurchaseOrderCSVReader",
+            "projectName": "ItemCountsMerge_605af54e"
+        },
+        {
+            "type": "java",
             "name": "Current File",
             "request": "launch",
-            "mainClass": "${file}",
-            "args": ["test-catalog.csv", "test-itemcounts.csv", "../catalog"]
+            "mainClass": "${file}"
         },
         {
             "type": "java",
@@ -17,7 +23,10 @@
             "request": "launch",
             "mainClass": "ClothingTaxReport",
             "projectName": "ItemCountsMerge_605af54e",
-            "args": ["test-catalog-report.csv", "../catalog"]
+            "args": [
+                "test-catalog-report.csv",
+                "../catalog"
+            ]
         },
         {
             "type": "java",
@@ -25,7 +34,10 @@
             "request": "launch",
             "mainClass": "InventoryCSVReader",
             "projectName": "ItemCountsMerge_605af54e",
-            "args": ["test-itemcounts.csv", "../catalog"]
+            "args": [
+                "test-itemcounts.csv",
+                "../catalog"
+            ]
         },
         {
             "type": "java",
@@ -33,7 +45,11 @@
             "request": "launch",
             "mainClass": "ItemCountsMerge",
             "projectName": "ItemCountsMerge_605af54e",
-            "args": ["test-catalog.csv", "test-itemcounts.csv", "../catalog"]
+            "args": [
+                "test-catalog.csv",
+                "test-itemcounts.csv",
+                "../catalog"
+            ]
         },
         {
             "type": "java",
@@ -41,7 +57,10 @@
             "request": "launch",
             "mainClass": "LibraryCSVReader",
             "projectName": "ItemCountsMerge_605af54e",
-            "args": ["test-catalog.csv", "../catalog"]
+            "args": [
+                "test-catalog.csv",
+                "../catalog"
+            ]
         },
         {
             "type": "java",
@@ -49,7 +68,9 @@
             "request": "launch",
             "mainClass": "LibraryCSVWriter",
             "projectName": "ItemCountsMerge_605af54e",
-            "args": ["../catalog"]
+            "args": [
+                "../catalog"
+            ]
         }
     ]
 }
