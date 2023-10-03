@@ -4,7 +4,6 @@ import org.apache.commons.csv.CSVRecord;
 import java.io.IOException;
 import java.io.Reader;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -12,16 +11,11 @@ import java.util.HashMap;
 import java.util.Iterator;
 
 public class InventoryCSVReader {
-    String filenameString;
-    String pathString;
-    Path filePath;
+
     String[] header;
     HashMap<String, String> countsBySku;
 
     public InventoryCSVReader(String filenameString, String pathString) {
-        this.filenameString = filenameString;
-        this.pathString = pathString;
-        this.filePath = Paths.get(pathString, filenameString);
         this.countsBySku = new HashMap<String, String>();
         readInventoryFile(filenameString);
     }
@@ -52,7 +46,7 @@ public class InventoryCSVReader {
                 countsBySku.put(sku, actual);
             }
         } catch(Exception e) {
-            System.out.println("An exception was thrown while reading Inventory Item Counts. File: "+ filenameString);
+            System.out.println("An exception was thrown while reading Inventory Item Counts. File: "+ filename);
             System.out.println(e.getMessage());
          }
     }
@@ -67,50 +61,18 @@ public class InventoryCSVReader {
 
     // Unit Test
     public static void main(String[] args) throws IOException {
-
-        if (args.length != 2) {
-            System.err.println("Usage: InventoryCSVReader InventoryFile FilePath");
-            System.exit(1);
-         }
-      
-         for(int i = 0; i< args.length; i++) {
-            System.out.println(String.format("Command Line Argument %d is %s", i, args[i]));
-         }  
-
-        try (
-            Reader reader = Files.newBufferedReader(Paths.get(args[1], args[0]));
-            CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
-        ) {
-            // Item Name,Item Variation,SKU,GTIN,Unit,Unit cost,Expected,Actual,Variance (count),Variance (cost),Counters
-            for (CSVRecord csvRecord : csvParser) {
-                // Accessing Values by Column Index
-                String name = csvRecord.get(0);
-                String itemVariation = csvRecord.get(1);
-                String sku = csvRecord.get(2);
-                String gtin = csvRecord.get(3);
-                String unit = csvRecord.get(4);
-                String unitCost = csvRecord.get(5);
-                String expected = csvRecord.get(6);
-                String actual = csvRecord.get(7);
-                String varianceCount = csvRecord.get(8);
-                String varianceCost = csvRecord.get(9);
-                String counters = csvRecord.get(10);
-
-                System.out.println("Record No - " + csvRecord.getRecordNumber());
-                System.out.println("---------------");
-                System.out.println("Name : " + name);
-                System.out.println("Item Variation : " + itemVariation);
-                System.out.println("SKU : " + sku);
-                System.out.println("GTIN : " + gtin);
-                System.out.println("Unit : " + unit);
-                System.out.println("Unit Cost : " + unitCost);
-                System.out.println("Expected : " + expected);
-                System.out.println("Actual : " + actual);
-                System.out.println("Variance (Count) : " + varianceCount);
-                System.out.println("Variance (Cost) : " + varianceCost);
-                System.out.println("Counter : " + counters);
-                System.out.println("---------------\n\n");
-            }
-        } 
+    
+        final String pathString = ".";
+        final String filename = "test-itemcounts.csv";
+        
+        InventoryCSVReader reader = new InventoryCSVReader(filename, pathString);
+        HashMap<String, String> items = reader.getCountsBySku();
+        int count = items.size();
+        if (count == 6) {
+            System.out.println("Succes: "+filename+" loaded successfully");
+            System.exit(0);
+        }
+        System.out.println("Error reading "+filename+": Expected 5 items and saw "+count);
+        System.exit(1);
     }
 }

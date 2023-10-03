@@ -126,85 +126,17 @@ public class LibraryCSVReader {
     // Unit Test
     public static void main(String[] args) throws IOException {
 
-        if (args.length != 2) {
-            System.err.println("Usage: LibraryCSVReader LibraryCatalogFilename LibraryCatalogPath");
-            System.exit(1);
-         }
-      
-         for(int i = 0; i< args.length; i++) {
-            System.out.println(String.format("Command Line Argument %d is %s", i, args[i]));
-         }  
-
-        try (
-            Reader reader = Files.newBufferedReader(Paths.get(args[1], args[0]));
-            CSVParser csvParser = new CSVParser(reader, CSVFormat.DEFAULT);
-        ) {
-            // Token,Item Name,Variation Name,SKU,Description,Category,GTIN,Square Online Item Visibility,
-            // Weight (lb),Price,Sellable,Stockable,Option Name 1,Option Value 1,Option Name 2,Option Value 2,
-            // Option Name 3,Option Value 3,Default Unit Cost,Default Vendor Name,Default Vendor Code,
-            // Current Quantity Femmebot Fashion,New Quantity Femmebot Fashion,Stock Alert Enabled Femmebot Fashion,
-            // Stock Alert Count Femmebot Fashion,Tax - NJ Sales Tax (6.625%)
-
-            for (CSVRecord csvRecord : csvParser) {
-                // Accessing Values by Column Index
-                String token = csvRecord.get(0);
-                String itemName = csvRecord.get(1);
-                String variationName = csvRecord.get(2);
-                String sku = csvRecord.get(3);
-                String desc = csvRecord.get(4);
-                String category = csvRecord.get(5);
-                String gtin = csvRecord.get(6);
-                String itemVis = csvRecord.get(7);
-                String weight = csvRecord.get(8);
-                String price = csvRecord.get(9);
-                String sellable = csvRecord.get(10);
-                String stockable = csvRecord.get(11);
-                String optName1 = csvRecord.get(12);
-                String optVal1 = csvRecord.get(13);
-                String optName2 = csvRecord.get(14);
-                String optVal2 = csvRecord.get(15);
-                String optName3 = csvRecord.get(16);
-                String optVal3 = csvRecord.get(17);
-                String defUnitCost = csvRecord.get(18);
-                String defVendorName = csvRecord.get(19);
-                String defVendorCode = csvRecord.get(20);
-                String quantity = csvRecord.get(21);
-                String newQuantity = csvRecord.get(22);
-                String alertEnable = csvRecord.get(23);
-                String alertCount = csvRecord.get(24);
-                String tax = csvRecord.get(25);
-
-
-                System.out.println("Record No - " + csvRecord.getRecordNumber());
-                System.out.println("---------------");
-                System.out.println("Token : " + token);
-                System.out.println("Item Name : " + itemName);
-                System.out.println("Variation Name : " + variationName);
-                System.out.println("SKU : " + sku);
-                System.out.println("Description : " + desc);
-                System.out.println("Category : " + category);
-                System.out.println("GTIN : " + gtin);
-                System.out.println("Weight : " + weight);
-                System.out.println("Item Visibility : " + itemVis);
-                System.out.println("Price : " + price);
-                System.out.println("Sellable : " + sellable);
-                System.out.println("Stockable : " + stockable);
-                System.out.println("Option Name 1 : " + optName1);
-                System.out.println("Option Value 1 : " + optVal1);
-                System.out.println("Option Name 2 : " + optName2);
-                System.out.println("Option Value 2 : " + optVal2);
-                System.out.println("Option Name 3 : " + optName3);
-                System.out.println("Option Value 3 : " + optVal3);
-                System.out.println("Default Unt Cost : " + defUnitCost);
-                System.out.println("Default Vender Name : " + defVendorName);
-                System.out.println("Default Vender Code : " + defVendorCode);
-                System.out.println("Quantity : " + quantity);
-                System.out.println("New Quantity : " + newQuantity);
-                System.out.println("Alert Enabled : " + alertEnable);
-                System.out.println("Alert Count : " + alertCount);
-                System.out.println("Tax : " + tax);
-                System.out.println("---------------\n\n");
-            }
-        } 
+        final String pathString = ".";
+        final String filename = "test-catalog.csv";
+        
+        LibraryCSVReader reader = new LibraryCSVReader(filename, pathString);
+        HashMap<String, LibraryItem> items = reader.getItemsBySku();
+        int count = items.size();
+        if (count == 14) {
+            System.out.println("Succes: "+filename+" loaded successfully");
+            System.exit(0);
+        }
+        System.out.println("Error reading "+filename+": Expected 5 items and saw "+count);
+        System.exit(1);
     }
 }
